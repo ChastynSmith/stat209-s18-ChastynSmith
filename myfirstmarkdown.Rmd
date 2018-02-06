@@ -15,16 +15,16 @@ library(ggplot2)
 In this dataset we collected some of the favorite restauants from the students in the class. Along with the restaurant we collected other things such as the location, cusine, etc.
 
 
-```{r setup, include=FALSE}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-restaurants <- read_csv("C:\\Users\\cs4pv\\Desktop\\fav_restaurants.csv")
+restaurants <- read_csv("https://raw.githubusercontent.com/URstats/stat209-s18-ChastynSmith/master/fav_restaurants.csv")
 ```
 
 ## Plotting The Data
 
  1)Here in this plot the type of cuisine of the restaurant was plotted against  where it is located
  
-```{r setup, include=FALSE}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ggplot(restaurants, aes(location, cuisine)) +
   geom_point()
@@ -33,7 +33,7 @@ ggplot(restaurants, aes(location, cuisine)) +
  
  2) Here in this plot we are comparing the amount of meal per person versus the amount of times the person visited the restaurant in one year. If they visited the restaurant once it was rounded down to zero. 
  
-```{r setup, include=FALSE}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ggplot(restaurants, aes(cost_per_person, yearly_visits)) +
   geom_point()
@@ -41,7 +41,7 @@ ggplot(restaurants, aes(cost_per_person, yearly_visits)) +
  
  3) Here in this plot it shows how many people had the same favorite restaurants. 
  
-```{r setup, include=FALSE}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ggplot(restaurants, aes(name)) +
   geom_bar()
