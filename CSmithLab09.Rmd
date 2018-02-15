@@ -62,45 +62,27 @@ add annotations to an axis that uses time as a component.
 
 ## Analysis
 
-Murders by state in 2014
-```{r}
-ggplot(murder, aes(state, murders_2014)) +
-       geom_point()
-```
-
-Murders by city in 2014
-```{r}
-ggplot(murder, aes(city, murders_2014)) +
-  geom_point()
-```
-
-Murders in 2014 vs murders in 2015
-```{r}
-ggplot(murder,aes(murders_2014, murders_2015)) +
-  geom_point()
-```
 
 Murders by city in 2014 vs 2015
+
 ```{r}
 ggplot(murder, aes(city, murders_2014)) +
-  geom_point() +
-  geom_point(aes(y = murders_2015))
-```
-```{r}
-ggplot(murder, aes(city, murders_2014)) +
-  geom_point(color = "green") +
-  geom_point(aes(y = murders_2015)) +
+  geom_point(color = "green", size = 2) +
+  geom_point(aes(y = murders_2015), size = 2) +
   coord_flip() +
   xlab("City") +
   ylab("Murders") +
   ggtitle("Murders by City in 2014 and 2015") +
-  annotate("text", x = "Chicago", y = 411, label = "Chicago")
+  annotate("text", x = "Baltimore", y = 211, label = "Baltimore") +
+  annotate("text", x = "Baltimore", y = 344, label = "Baltimore") +
+  annotate("text", x = "Buffalo", y = 60, label = "Buffalo") +
+  annotate("text", x = "Buffalo", y = 41, label = "Buffalo")
   
   
 
 ```
 
-
+Here in this graph I have shown the murder rates in each city from the years 2014 and 2015. I have annotated the cities Buffalo, New York which had the greatest decrease in crime of -19 from 2014 to 2015. I have also highlted Baltimore, Maryland who had the greatest increase in crime of 133 from 2014 to 2015. Baltimore city offcials claimed that this increase in crime was the highest since the crime increase from 1967-68.
 
 
 
