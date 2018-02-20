@@ -1,0 +1,99 @@
+---
+title: "Presence of black families appearing on Family Feud"
+author: "Chastyn Smith"
+output: html_notebook
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(ggplot2)
+library(dplyr)
+```
+
+The presence of black families appearing on Family Feud
+
+## Overview
+
+Family Feud is a family friendly game show that allows two families to compete against each other for $20,000. During the summers my family and I watch Family Feud faithfully and we always notice that black families appear significantly less than white families. So for my project I decided to research whether the presence of black families on Family Feud increased when Steve Harvey (a black host) became the host. For this project I took the first eleven episodes of each of the hosts first season hosting family Feud and logged everytime a black family appeared. This also inlcudes black families that kept coming back because they won the previous episode. To find most of the episodes I youtubed them and for other I was bale to find them on a streaming service. 
+
+## Data dictionary
+
+Here is a data dictionary for the familyfeud dataset:
+
+- host: a categorical variable that shows which person was the host at that time of the specific episode. Possible options are:
+                        "Dawson"
+                        "Combs"
+                        "Karn"
+                        "Harvey"
+
+- episode: a numeric variable that provides the season and episode number of Family Feud. Format as "season.episode".
+
+- year: a numeric variable that tells the year each episode was aired.
+
+- name: a character variable that lists the name the family chooses to go by on each specifc episode.
+
+aa_descent: a character variable that notes whether the family was black/of African American descent. 
+
+Which can be read in as follows:
+
+```{r}
+familyfeud <- read_csv("https://raw.githubusercontent.com/URstats/stat209-s18-ChastynSmith/master/familyfeud.csv")
+familyfeud
+```
+
+
+## Exploratory Analysis
+
+This graph shows the total amount of times a white family has appeared on Family Feud compared to a black family spanning all of the hosts first season.
+
+```{r}
+ggplot(familyfeud, aes( aa_descent)) +
+  geom_bar() +
+  xlab("Of African American descent")
+```
+
+
+This is a plot of each hosts families that they had during their first season hosting Family Feud. From this graph we see that some hosts have more dots than others. There is an anomaly in the data. I tried to make sure each hosts had the same amount of episodes represented, but as you have seen from the data two of the hosts are missing exactly one episode. Another reason for why some of the hosts have more dots is because some of the familes continously won therefore advancing to the next episode. So one one family could span across five episodes, but on this graph they are represented by one dot. 
+
+```{r}
+ggplot(familyfeud, aes(host, name)) +
+  geom_point()
+```
+
+
+Here in this table I have limited the data to just the black families that have appeared on an episode by host. Also keeping in mind that some familes spanned across multiple episodes. 
+
+```{r, echo=FALSE}
+black_families <- filter(familyfeud, aa_descent == "yes")
+black_families
+```
+
+This graph shows each hosts families that appeared on episodes during each of their first season hosting. The familes that appeared to be black or of African American descent are highlighted in blue. On the graph the hosts are in alphabetical order, but in chronological order this is the number of different black families each host had during their first season:
+                                Dawson - 2
+                                Combs - 2
+                                Karn - 6
+                                Harvey - 4
+```{r}
+ggplot(familyfeud, aes(host, name)) +
+  geom_point() +
+  geom_point(color = "blue", data = black_families)
+```
+  
+
+
+
+
+## Conclusion
+
+From the graphs it appears that the most black familes appeared on Family Feud during the fourth season in 2002 when Richard Karn was the host with Steve Harvey coming in second. Although less black families appeared on Family Feud over the span of eleven episodes from each host, the data does not show that the presence of black families increased with the addition of a black host. This may not be a trend, or it may be because so many families continued to win it decreased the total amount of new families that could have been on the show. For future analysis a larger data pool of episdoes could be used and only the new familes (not reoccuring ones) could be represented in the data. 
+
+## References
+
+youtube.com
+https://www.moviefone.com/tv/family-feud/229847/season-12/
+imbd.com
+https://en.wikipedia.org/wiki/Family_Feud
+
+
+
