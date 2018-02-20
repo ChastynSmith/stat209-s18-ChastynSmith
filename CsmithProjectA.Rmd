@@ -21,19 +21,19 @@ Family Feud is a family friendly game show that allows two families to compete a
 
 Here is a data dictionary for the familyfeud dataset:
 
-- host: a categorical variable that shows which person was the host at that time of the specific episode. Possible options are:
+- **host**: a categorical variable that shows which person was the host at that time of the specific episode. Possible options are:
                         "Dawson"
                         "Combs"
                         "Karn"
                         "Harvey"
 
-- episode: a numeric variable that provides the season and episode number of Family Feud. Format as "season.episode".
+- **episode**: a numeric variable that provides the season and episode number of Family Feud. Format as "season.episode".
 
-- year: a numeric variable that tells the year each episode was aired.
+- **year**: a numeric variable that tells the year each episode was aired.
 
-- name: a character variable that lists the name the family chooses to go by on each specifc episode.
+- **name**: a character variable that lists the name the family chooses to go by on each specifc episode.
 
-aa_descent: a character variable that notes whether the family was black/of African American descent. 
+- **aa_descent**: a character variable that notes whether the family was black/of African American descent. 
 
 Which can be read in as follows:
 
