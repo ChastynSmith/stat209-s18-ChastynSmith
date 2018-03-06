@@ -1,0 +1,95 @@
+---
+title: "Aspects of Richmond"
+author: "Chastyn Smith"
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(fig.height = 5)
+knitr::opts_chunk$set(fig.width = 8.5)
+knitr::opts_chunk$set(out.width = "100%")
+knitr::opts_chunk$set(dpi = 300)
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(viridis)
+library(forcats)
+library(ggmap)
+```
+
+
+
+```{r}
+tracts <- read_csv("https://raw.githubusercontent.com/statsmaths/stat_data/gh-pages/acs_tract_data_2016.csv.gz")
+```
+
+```{r}
+richmondtracts <- filter(tracts, cbsa == "Richmond, VA")
+richmondtracts
+```
+```{r}
+richmondcity <- filter(richmondtracts, county == "Richmond city")
+richmondcity
+```
+
+
+```{r}
+chesterfieldcounty <- filter(richmondtracts, county == "Chesterfield County")
+chesterfieldcounty
+```
+
+```{r}
+henricocounty <- filter(richmondtracts, county == "Henrico County")
+henricocounty
+```
+A map of the Richmond Tract and the city of Richmond
+
+```{r}
+qmplot(lon, lat, data = richmondtracts, geom = "blank")
+
+qmplot(lon, lat, data = richmondcity, geom =  "blank")
+```
+
+For my project I chose the metropolitan area of Richmond, Va. I originally wanted to look at certain aspects of the city of Richmond such as race and income and compare these same aspects to those of the counties, Henrico and Chesterfield which surround Richmond. With this data I wanted to detect whether the surrounding counties had any influence on the city of Richmond in the areas of income and race. Because of how much data was provided for the city of Richmond alone I chose to go a different route. Thus, for this project I looked at population, race and income from all quadrants for the city of Richmond. I used this data to test preconceived notions about the city that I have heard and while most of the notions remained true some patterns that I did not expect arose. 
+
+A Map of the population of Richmond City.
+```{r}
+qmplot(lon, lat, data = richmondcity, geom = "blank") +
+  geom_point(aes(color = population), alpha = 0.8) +
+  scale_color_viridis()
+```
+
+This first visualization shows the population distribution within the city of Richmond. Although, it may seem big, the highest population in two specific areas are approximately around 8,000. The rest of the city's population hovers around 2,000-4,000, with some spots of the population ranging from 4,000-6,000. This was all pretty standard but, what I did not expect is where the highest population was found. The highest population in Richmond can be found south of the James River affectionately known as "Southside". More specifically the triangular area between Jefferson Davis highway, Hull Street, and Walmsley Boulevard. I am interested to know how long this trend has persisted and if the data included college students a part of the population count.
+
+
+
+A map of the population of the city of Richmond by race. (need to figure out how to layer on different races at the same time.)
+```{r}
+qmplot(lon, lat, data = richmondcity, geom = "blank") +
+  geom_point(aes(color = race_white, size = race_black), alpha = 0.8) +
+  scale_color_viridis()
+```
+
+My second visualization looks at race around Richmond. Right now on the map I specifically have the white and black race highlighted on the map, but I hope to be able to include all of the races in the map. With this visualization we are able to see the distribution of whites and blacks within the city of Richmond. From the map we see that an inverse relationship may be present which is not what I expected. With those of the white race being shown by color and those of the black race being shown by size, it appears that where the majority of white people live the less black people live and vice versa. I did not expect to see this, but it also make sense. Richmond city has historically been a black city so I expected to see the same or close distribution of black people around the city while the majority of white people would be in the Westend. However, from the map we see that while yes the majority of white people do live in the Westend, the Westend also has the lowest population of black people in the entire city of Richmond. We also see this pattern starting to form in the downtown/ Shockoe Bottom area. A good guess for this pattern would be gentrification. With the influx of those who are in a higher income quadrant, those who are not get kicked out of their neighborhoods. This is not to say that this is a definite explanation, but a hypothesis. 
+
+
+
+Make a map of Richmond with the highest income color-coded to see the distribution of wealth.   
+```{r}
+qmplot(lon, lat, data = richmondcity, geom = "blank") +
+  geom_point(aes(color = hh_income_q3), alpha = 0.8)  +
+  scale_color_viridis()
+  
+```
+
+My third and final visualization was used to look at the income distribution around the city of Richmond. From this visualization I was able to detect a patter pattern: those who have the highest end of income from each income quadrant seem to always be placed in what is known as the Westend.
+
+
+
+
