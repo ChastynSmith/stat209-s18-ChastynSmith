@@ -158,14 +158,14 @@ Finally, fit a regression model that predicts the overall score as a function
 of the variable `synergy` coded as a factor.
 
 ```{r}
-tacomodel <- lm_basic(overall ~ 1 + synergy, data = burrito)
+tacomodel <- lm_basic(overall ~ 1 + factor(synergy), data = burrito)
 reg_table(tacomodel, level = 0.95)
 ```
 
 What does the model predict the overall score for a restaurant with a
 synergy score of 3 will be?
 
-**Answer**:
+**Answer**: 3.19
 
 
 
