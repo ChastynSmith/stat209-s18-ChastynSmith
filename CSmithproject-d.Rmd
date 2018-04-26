@@ -1,0 +1,130 @@
+---
+title: "The Stats Don't Lie"
+author: "Chastyn Smith"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(out.width = "100%")
+knitr::opts_chunk$set(dpi = 300)
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(viridis)
+library(forcats)
+library(smodels)
+```
+
+
+
+```{r, include=FALSE}
+nfl <- read_csv("https://statsmaths.github.io/stat_data/nfl2015.csv")
+```
+## Introduction
+
+### Cameron Newton was first drafted by the Carolina Panthers in 2011 and since then he has been the starting quarterback for the team. Seeing as he has been healthy his entire career with the Carolina Panthers a safe assumption would be that his stats have increased with his longevity. Since being drafted Cam has been regarded as a top quarterback overall.With such high praises I wondered what (if any) area might Cam Newton lack in. Therefore, I took a deeper look at his stats and see how they stacked up against other quarterbacks in the league. While looking at Cam's stats along with other quarterbacks I found an area that he seemed to fall behind in: passing completions. This lead me to my thesis: The data collected and graphs presented of Cam Newton stats from his 2015 season with the Carolina Panthers places Newton as a below average passing quarterback determined by his pass completion rate and how it stacked up against other quarterbacks who have over 300 passes. To come to this suggestion I go looked at Cam's average yards gained on each drive and play. I wanted to see where he lined up with yards gained which lead me to wondering if he passed more or handed the ball off more to be rushed. Because there are other rushers on the team whose main job it is to run the ball, I decided to look at his passing. For this I calculated the percent of passes completed/out of the pass attempts for all of the quarterbacks in the filtered data set. Surprised by what I found, I decided to see if there were any anomalies in the data set that caused the result that I seen.
+ 
+
+
+
+```{r, include= FALSE}
+qbs <- group_summarize(nfl, passer)
+qbs
+qbs <- filter(qbs, n > 300)
+qbs <- filter(qbs, n < 700)
+qbs
+```
+
+
+
+To begin my investigation I wanted to see where Cam lined up among other Quarterbacks with more than 300 passes. For this I first looked at the average amount of yards each Quarterback gained over the 2015 season for their plays and drives. The red points show each passers average yards gained on a play and the black points represent the average net yards from a drive.
+
+
+
+```{r}
+ggplot(qbs, aes(yards_gained_mean, passer)) +
+  geom_point(color = "red", size = 2.0) + 
+  geom_point(aes(x = yards_net_mean), size = 2.0) +
+  annotate("point", x = 7.9, y = "C.Newton", color = "Purple", size = 4.0) +
+  annotate("point", x = 30.9, y = "C.Newton", color = "Orange", size = 4.0) +
+  xlab("Average Yards") +
+  ylab("Passers") +
+  ggtitle("Mean yards Gained by the Passers") +
+  annotate("text", x = 12, y = "A.Rodgers", label = "Yards/play", color = "red", size = 5.5) +
+  annotate("text", x = 33, y = "T.Bridgewater", label = "Yards/drive", size = 5.5)
+```
+
+This graph has both average yards gained on each play (red) and the average yards gained from each drive (black). From the graph we see that Cam lies in the middle of both sets of data. Cam's average yards gained on each play (purple) was 7.97 and his average yards gained on each drive (orange) was 30.97. From this we can see that Cam does not lack in covering field, but I wonder if these yards are from passing or rushing.
+
+
+
+
+```{r, include=FALSE}
+carolina <- filter(nfl, offense_team == "CAR")
+carolina
+```
+
+
+### "Passcent"
+```{r}
+ggplot(carolina, aes(passer)) +
+  geom_bar()
+```
+
+
+```{r, include=FALSE}
+qbs$passcent <- (qbs$pass_complete_sum / qbs$pass_sum) * 100
+```
+
+
+Next I wanted to see out of the pass attempts made by Cam how many were completed. So off to the side I computed the "passcent" or the pass completion rate which just converted the amount of times they completed a pass into a percentage. 
+
+```{r}
+quartiles(qbs$passcent)
+deciles(qbs$passcent)
+
+ggplot(qbs, aes(passcent, passer)) +
+  geom_point( size = 3.0) + 
+  annotate("point", x = 60.7, y = "C.Newton", color = "red", size = 5.0) +
+  scale_x_continuous(breaks = c(54,58,62,66,70,74)) +
+  annotate("rect", xmin = 64, xmax = 66 ,
+           ymin = "A.Dalton", ymax = "T.Taylor", 
+           fill = "gold" , alpha = 0.4) +
+  annotate("text", x = 65, y = "A.Rodgers", label = "Average Passcent", color = "red") +
+  ggtitle("Passer's Passcent") +
+  xlab("Passcent (% of passes complete)") +
+  ylab("Passer")
+```
+
+I found the average passcent rate to be 65%. With this I looked at all of the passers passcent rates in comparison to the average rate. The area on the graph where the average passcent lies is highlighted in gold. Cam Newton's passcent for the 2015 season was 60.66% which sounds good, but compared to the other quarterbacks passcent and the average passcent among them, Cam's passcent lies below the average. This discrepency isn't too bad though considering the passcent's ranged from 58.3%-71.3%.
+
+
+
+### The Future for Cam
+
+This data surprised me so I decided to take a deeper look into the pass data. With Cam's below average passcent rate I wondered if this could have been caused by outliers in the data who may have significantly less total passes than Cam or if there is a positive relationship with pass attempts and pass completions that Cam's stats were "too young" for. Therefore, I decided to see if passes completed increased with the amount of passes attempted and to see if there was also a positive relationship with passes attempted and passcent.
+
+ 
+
+```{r}
+ggplot(qbs, aes(pass_sum, pass_complete_sum)) +
+  geom_point(size = 3.0, aes(color = passcent)) +
+  scale_color_viridis() +
+  ggtitle("Passes completed") +
+  xlab("Sum of Passes Attempted") +
+  ylab("Sum of Passes Completed") +
+  annotate("text", x= 524, y = 374, label = "K.Cousins", alpha = 0.7) +
+  annotate("text", x = 587, y = 355, label = "B.Bortles", alpha = 0.7)
+```
+
+The graph shows that there is a positive correlation between the amount of pass attempts and the amount of pass attempts completed. Among these quarterbacks as the pass attempts increase the pass attempt completions also increase. It also shows that a players passcent rate will not necessarily increase with the more pass attempts made.
+
+
+
+## References
+http://www.nfl.com/news/story/0ap3000000619129/article/qb-index-yearend-rankings
